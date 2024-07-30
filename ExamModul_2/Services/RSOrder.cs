@@ -10,10 +10,10 @@ namespace ExamModul_2.Services
         {
             if (categories.Count > 0)
             {
-                int attachCategory = ArrowIndex(categories, "Attach Product to Category");
-                var category = categories.FirstOrDefault(k => k.Id == attachCategory + 1);
-                int attachProduct = ArrowIndex(products, "Attach Product to Category");
-                var product = products.FirstOrDefault(k => k.Id == attachProduct + 2);
+                int orderCategory = ArrowIndex(categories, "Order Category");
+                var category = categories.FirstOrDefault(k => k.Id == orderCategory + 1);
+                int orderProduct = ArrowIndex(products, "Order Product");
+                var product = products.FirstOrDefault(k => k.Id == orderProduct + 2);
                 if (category == null || product == null)
                 {
                     Console.WriteLine("Error null");

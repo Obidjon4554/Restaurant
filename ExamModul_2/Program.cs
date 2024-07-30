@@ -148,21 +148,22 @@ namespace ExamModul_2
                             }
                             goto admin;
                         case 3:
+                            adminAbout:
                             int adminAbout = ArrowIndex(adminAboutMenu, "Main:\\Admin\\About");
                             switch (adminAbout)
                             {
                                 case 0:
                                     //add
-                                    goto category;
+                                    goto adminAbout;
                                 case 1:
                                     //update
-                                    goto category;
+                                    goto adminAbout;
                                 case 2:
                                     //delete
-                                    goto category;
+                                    goto adminAbout;
                                 case 3:
                                     //shpw
-                                    goto category;
+                                    goto adminAbout;
                                 case 4:
                                     goto admin;
                             }
