@@ -1,0 +1,6 @@
+Xatoliklar.
+Admin bo'lib kirgan vaqtimda.
+About -> dagilarni hammasiga Category bo'limiga redirect qivordi. About bo'limi Customer'da ham ishlamadi.
+Order berish,saqlash,ko'rish admin va customer tomonda ishlamadi.
+Tasvsiyalar:
+Code styling e'tibor bering. Metodlar orasidagi emtp linelar ham code'ni o'qishga halal beradi.
