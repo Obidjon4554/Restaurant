@@ -50,6 +50,7 @@ namespace ExamModul_2
                 "Delete Product",
                 "Attach Product To Category",
                 "Show Products",
+                "Show Menu",
                 "Back"
             };
             List<string> adminOrderMenu = new List<string>()
@@ -124,6 +125,10 @@ namespace ExamModul_2
                                     restaurantService.ListProducts();
                                     goto product;
                                 case 5:
+                                    restaurantService.ListMenu();
+                                    goto product;
+
+                                case 6:
                                     goto admin;
                             }
                             goto admin;

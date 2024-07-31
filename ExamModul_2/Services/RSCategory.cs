@@ -69,6 +69,9 @@ namespace ExamModul_2.Services
             {
                 int updateTOption = ArrowIndex(categories, "Update Category");
                 var Category = categories.FirstOrDefault(k => k.Id == updateTOption + 1);
+                foreach (var category in categories)
+                    if (Category.Id < category.Id)
+                        category.Id -= 1;
                 if (Category != null)
                 {
                     categories.Remove(Category);
@@ -99,14 +102,11 @@ namespace ExamModul_2.Services
                     Console.WriteLine($"Category: {Category.Id}, Name: {Category.Name}");
                 }
                 Console.ReadKey();
-                Console.ReadKey();
                 return true;
             }
             else
             {
                 Console.WriteLine("Category not found!");
-                Console.ReadKey();
-
                 Console.ReadKey();
                 return false;
             }

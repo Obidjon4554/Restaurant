@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Xml.Linq;
 using ExamLibrary;
 
 namespace ExamModul_2.Services
@@ -6,6 +7,7 @@ namespace ExamModul_2.Services
     public partial class RestaurantService
     {
         private string jsonPathProduct = Path.Combine(Directory.GetCurrentDirectory(), "products.json");
+        private string jsonPathMenu = Path.Combine(Directory.GetCurrentDirectory(), "menu.json");
         public bool AddProduct()
         {
             Console.Write("Enter Product Name: ");
@@ -69,6 +71,9 @@ namespace ExamModul_2.Services
             {
                 int updateTOption = ArrowIndex(products, "Update Product");
                 var Product = products.FirstOrDefault(k => k.Id == updateTOption + 1);
+                foreach (var product in products)
+                    if (Product.Id < product.Id)
+                        product.Id -= 1;
                 if (Product != null)
                 {
                     products.Remove(Product);
@@ -91,13 +96,12 @@ namespace ExamModul_2.Services
 
         public bool AttachProductToCategory()
         {
-            if (categories.Count > 0)
+            if (categories.Count > 0 && products.Count>0)
             {
                 int attachCategory = ArrowIndex(categories, "Attach Product to Category");
                 var category = categories.FirstOrDefault(k => k.Id == attachCategory + 1);
                 int attachProduct = ArrowIndex(products, "Attach Product to Category");
-                var product = products.FirstOrDefault(k => k.Id == attachProduct +2);
-
+                var product = products.FirstOrDefault(k => k.Id == attachProduct + 1);
                 if (category == null || product == null)
                 {
                     Console.WriteLine("Error null");
@@ -118,20 +122,27 @@ namespace ExamModul_2.Services
 
                     category.ProductCategory.Add(ProductCategory);
                     product.ProductCategory.Add(ProductCategory);
-                    Console.ReadKey();
+                    menu.Add(new Menu() { category = category, product = product });
+                    string serialized = JsonSerializer.Serialize(menu);
+                    using (StreamWriter writer = new StreamWriter(jsonPathMenu))
+                    {
+                        writer.WriteLine(serialized);
+                    }
                     Console.WriteLine("Successfuly attached!");
+                    Console.ReadKey();
                     return true;
                 }
                 else
                 {
                     Console.WriteLine("You can't attach this product twice!");
+                    Console.ReadKey();
                     return false;
                 }
             }
             else
             {
 
-            Console.WriteLine("Category list is empty!");
+            Console.WriteLine("Category or Product list is empty!");
             Console.ReadKey();
             return false;
             }
@@ -139,7 +150,20 @@ namespace ExamModul_2.Services
         public void ListProducts()
         {
             products = JsonReadProduct();
-            if (categories.Count > 0)
+            if (products.Count > 0)
+                foreach (var product in products)
+                {
+                    Console.WriteLine($"Product: {product.Name}, ID: {product.Id}");
+                }
+            else
+                Console.WriteLine("Product list is empty.");
+            Console.ReadKey();
+        }
+
+        public void ListMenu()
+        {
+            menu = JsonReadMenu();
+            if (categories.Count > 0 && products.Count>0)
                 foreach (var category in categories)
                 {
                     Console.WriteLine($"Category: {category.Name}");
@@ -147,17 +171,21 @@ namespace ExamModul_2.Services
                     {
                         if (ts.Product.Name != null)
                             Console.WriteLine($"Product: {ts.Product.Name}, ID: {ts.Product.Id}");
-
                     }
                 }
             else
-                Console.WriteLine("Product and Category lists are empty.");
+                Console.WriteLine("Product or Category lists is empty.");
             Console.ReadKey();
         }
         public List<Product> JsonReadProduct()
         {
             string json = File.ReadAllText(jsonPathProduct);
             return string.IsNullOrWhiteSpace(json) ? new List<Product>() : JsonSerializer.Deserialize<List<Product>>(json);
+        }
+        public List<Menu> JsonReadMenu()
+        {
+            string json = File.ReadAllText(jsonPathMenu);
+            return string.IsNullOrWhiteSpace(json) ? new List<Menu>() : JsonSerializer.Deserialize<List<Menu>>(json);
         }
 
         private int ArrowIndex(List<Product> list, string name)
